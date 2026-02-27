@@ -1,47 +1,137 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import { ConversionContext } from "../context/ConversionContext";
 
 function Dashboard() {
+  const navigate = useNavigate();
+  const { setConversionData } = useContext(ConversionContext);
+
   const [amount, setAmount] = useState("");
   const [from, setFrom] = useState("USD");
-  const [to, setTo] = useState("GHS");
-  const [result, setResult] = useState(null);
+  const [to, setTo] = useState("EUR");
+  const [currencies, setCurrencies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Load available currencies dynamically
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      try {
+        const res = await fetch(
+          `https://v6.exchangerate-api.com/v6/${import.meta.env.VITE_EXCHANGE_API_KEY}/latest/USD`
+        );
+        const data = await res.json();
+        setCurrencies(Object.keys(data.conversion_rates));
+      } catch (err) {
+        setError("Failed to load currencies.");
+      }
+    };
+
+    fetchCurrencies();
+  }, []);
 
   const handleConvert = async () => {
-    const res = await fetch(
-      `https://api.exchangerate.host/latest?base=${from}`
-    );
-    const data = await res.json();
-    const rate = data.rates[to];
-    setResult((amount * rate).toFixed(2));
+    if (!amount) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(
+        `https://v6.exchangerate-api.com/v6/${import.meta.env.VITE_EXCHANGE_API_KEY}/latest/${from}`
+      );
+
+      const data = await res.json();
+      const rate = data.conversion_rates[to];
+      const result = (amount * rate).toFixed(2);
+
+      setConversionData({
+        amount,
+        from,
+        to,
+        result,
+        rate,
+      });
+
+      navigate("/conversion");
+    } catch (err) {
+      setError("Conversion failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSwap = () => {
+    const temp = from;
+    setFrom(to);
+    setTo(temp);
   };
 
   return (
-    <div>
-      <h2>Currency Converter</h2>
+    <>
+      <Navbar />
+      <div className="app-container">
+        <div className="bg-white shadow-lg p-6 rounded-xl w-full max-w-md">
+          <h2 className="text-2xl font-semibold mb-4 text-center">
+            Currency Converter
+          </h2>
 
-      <input
-        type="number"
-        placeholder="Enter amount"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-      />
+          <input
+            type="number"
+            placeholder="Enter amount"
+            className="w-full border p-2 rounded mb-4"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
 
-      <select value={from} onChange={(e) => setFrom(e.target.value)}>
-        <option value="USD">USD</option>
-        <option value="GHS">GHS</option>
-        <option value="EUR">EUR</option>
-      </select>
+          <div className="flex gap-4 mb-4">
+            <select
+              className="w-full border p-2 rounded"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+            >
+              {currencies.map((cur) => (
+                <option key={cur} value={cur}>
+                  {cur}
+                </option>
+              ))}
+            </select>
 
-      <select value={to} onChange={(e) => setTo(e.target.value)}>
-        <option value="USD">USD</option>
-        <option value="GHS">GHS</option>
-        <option value="EUR">EUR</option>
-      </select>
+            <select
+              className="w-full border p-2 rounded"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+            >
+              {currencies.map((cur) => (
+                <option key={cur} value={cur}>
+                  {cur}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <button onClick={handleConvert}>Convert</button>
+          <button
+            onClick={handleSwap}
+            className="w-full mb-4 bg-gray-200 py-2 rounded hover:bg-gray-300"
+          >
+            Swap Currencies
+          </button>
 
-      {result && <h3>Converted Amount: {result}</h3>}
-    </div>
+          <button
+            onClick={handleConvert}
+            disabled={loading}
+            className="Convert"
+          >
+            {loading ? "Converting..." : "Convert"}
+          </button>
+
+          {error && (
+            <p className="mt-4 text-red-600 text-center">{error}</p>
+          )}
+        </div>
+      </div>
+    </>
   );
 }
 
