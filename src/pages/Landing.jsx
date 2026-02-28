@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import bgImage from "../assets/exchagerate.png";
 
 function Landing() {
   return (
     <>
       <Navbar />
-      <div className="app-container ">
+      <div className="app-container flex flex-col items-center justify-center min-h-screen bg-gray-100 text-center" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}>
         <h2 className="text-4xl font-bold mb-4">
           Real-Time Currency Exchange Rates
         </h2>

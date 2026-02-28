@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { ConversionContext } from "../context/ConversionContext";
+import bgImage from "../assets/exchagerate.png";
 
 function Conversion() {
   const { conversionData } = useContext(ConversionContext);
@@ -23,8 +24,8 @@ function Conversion() {
   return (
     <>
       <Navbar />
-      <div className="app-container ">
-        <div className="bg-white shadow-lg p-6 rounded-xl w-full max-w-md text-center">
+      <div className="app-container flex items-center justify-center min-h-screen bg-gray-100" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}>
+        <div className=" bg-white shadow-lg p-6 rounded-xl w-full max-w-md text-center">
           <h2 className="text-2xl font-semibold mb-4">
             Conversion Result
           </h2>

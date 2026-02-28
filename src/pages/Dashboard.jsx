@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { ConversionContext } from "../context/ConversionContext";
+import bgImage from "../assets/exchagerate.png";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ function Dashboard() {
   return (
     <>
       <Navbar />
-      <div className="app-container">
+      <div className="app-container flex items-center justify-center min-h-screen bg-gray-100" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}>
         <div className="bg-white shadow-lg p-6 rounded-xl w-full max-w-md">
           <h2 className="text-2xl font-semibold mb-4 text-center">
             Currency Converter
@@ -113,16 +114,14 @@ function Dashboard() {
 
           <button
             onClick={handleSwap}
-            className="w-full mb-4 bg-gray-200 py-2 rounded hover:bg-gray-300"
-          >
-            Swap Currencies
+            className="w-full mb-4 bg-gray-200 py-2 rounded hover:bg-gray-300">
+            Swap Currencies 
           </button>
 
           <button
             onClick={handleConvert}
             disabled={loading}
-            className="Convert"
-          >
+            className="Convert">
             {loading ? "Converting..." : "Convert"}
           </button>
 
