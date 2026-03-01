@@ -24,8 +24,8 @@ function Conversion() {
   return (
     <>
       <Navbar />
-      <div className="app-container flex items-center justify-center min-h-screen bg-gray-100" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}>
-        <div className=" bg-white shadow-lg p-6 rounded-xl w-full max-w-md text-center">
+      <div className="app-container" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}>
+        <div>
           <h2 className="text-2xl font-semibold mb-4">
             Conversion Result
           </h2>
@@ -34,17 +34,16 @@ function Conversion() {
             {conversionData.amount} {conversionData.from} =
           </p>
 
-          <p className="text-3xl font-bold mb-2">
+          <p>
             {conversionData.result} {conversionData.to}
           </p>
 
-          <p className="text-gray-600">
+          <p>
             1 {conversionData.from} = {conversionData.rate} {conversionData.to}
           </p>
 
           <Link
             to="/dashboard"
-            className="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
           >
             Convert Again
           </Link>

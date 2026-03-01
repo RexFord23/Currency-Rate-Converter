@@ -72,23 +72,21 @@ function Dashboard() {
   return (
     <>
       <Navbar />
-      <div className="app-container flex items-center justify-center min-h-screen bg-gray-100" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}>
-        <div className="bg-white shadow-lg p-6 rounded-xl w-full max-w-md">
-          <h2 className="text-2xl font-semibold mb-4 text-center">
+      <div className="app-container " style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}>
+        <div>
+          <h2>
             Currency Converter
           </h2>
 
           <input
             type="number"
             placeholder="Enter amount"
-            className="w-full border p-2 rounded mb-4"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
 
-          <div className="flex gap-4 mb-4">
+          <div>
             <select
-              className="w-full border p-2 rounded"
               value={from}
               onChange={(e) => setFrom(e.target.value)}
             >
@@ -100,7 +98,6 @@ function Dashboard() {
             </select>
 
             <select
-              className="w-full border p-2 rounded"
               value={to}
               onChange={(e) => setTo(e.target.value)}
             >
@@ -114,19 +111,18 @@ function Dashboard() {
 
           <button
             onClick={handleSwap}
-            className="w-full mb-4 bg-gray-200 py-2 rounded hover:bg-gray-300">
+            >
             Swap Currencies 
           </button>
 
           <button
             onClick={handleConvert}
-            disabled={loading}
-            className="Convert">
+            disabled={loading}>
             {loading ? "Converting..." : "Convert"}
           </button>
 
           {error && (
-            <p className="mt-4 text-red-600 text-center">{error}</p>
+            <p>{error}</p>
           )}
         </div>
       </div>
